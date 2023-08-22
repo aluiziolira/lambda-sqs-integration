@@ -37,7 +37,7 @@ class PrimeNumberManager:
                 }
             }
             response = AWSUtils.send_sqs_message(
-                queue_url, self.prime_numbers, attributes
+                queue_url, str(self.prime_numbers), attributes
             )
             if response:
                 print("Prime numbers sent to the target SQS!")
