@@ -83,7 +83,7 @@ functions:
     timeout: 30
     handler: handler.prime_number_processing
     name: "prime-number-processor-lambda"
-    reservedConcurrency: 1
+    reservedConcurrency: 10
     environment:
       SQS_PRIMES_TARGET: "${self:custom.sqs_prime_number_target_url}"
     events:
