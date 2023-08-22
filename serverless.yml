@@ -79,13 +79,8 @@ custom:
 
 
   pythonRequirements:
-    pythonBin: python3
     noDeploy:
-      - boto3
-      - botocore
       - awscli
-      - sympy
-      - black
       - pytest
       - pytest-mock
 plugins:
