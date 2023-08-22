@@ -1,0 +1,99 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: lambda-sqs-integrated
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.11
+  memorySize: 128
+  region: us-east-2
+
+# you can add statements to the Lambda function's IAM Role here
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "sqs:SendMessage"
+            - "sqs: DeleteMessage"
+          Resource:
+            Fn::GetAtt:
+              - PrimeNumberFeedQueue
+              - Arn
+        - Effect: "Allow"
+          Action:
+            - "sqs:SendMessage"
+          Resource: "${self:custom.sqs_prime_number_target_arn}"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+package:
+  excludeDevDependencies: true
+  exclude:
+    - node_modules/**
+    - venv/**
+    - test/**
+    - conftest.py
+
+resources:
+  Resources:
+    PrimeNumberFeedQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "prime-number-feed-sqs"
+        VisibilityTimeout: 60
+        MessageRetentionPeriod: 60
+        ReceiveMessageWaitTimeSeconds: 20
+        RedrivePolicy:
+          deadLetterTargetArn:
+            "Fn::GetAtt":
+              - PrimeNumberFeedDeadLetterQueue
+              - Arn
+          maxReceiveCount: 10
+    PrimeNumberFeedDeadLetterQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "dlq-prime-number-feed-sqs"
+        MessageRetentionPeriod: 60
+
+
+functions:
+  prime-numbers-processor:
+    timeout: 30
+    handler: handler.prime_number_processing
+    name: "prime-number-processor-lambda"
+    reservedConcurrency: 1
+    environment:
+      SQS_PRIMES_TARGET: "${self:custom.sqs_prime_number_target_url}"
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - PrimeNumberFeedQueue
+              - Arn
+          batchSize: 1
+
+custom:
+  sqs_prime_number_target_arn: arn:aws:sqs:us-east-2:009958566421:prime-number-target-sqs
+  sqs_prime_number_target_url: "https://sqs.us-east-2.amazonaws.com/009958566421/prime-number-target-sqs"
