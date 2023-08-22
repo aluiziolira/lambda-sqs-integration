@@ -76,3 +76,17 @@ functions:
 custom:
   sqs_prime_number_target_arn: arn:aws:sqs:us-east-2:009958566421:prime-number-target-sqs
   sqs_prime_number_target_url: "https://sqs.us-east-2.amazonaws.com/009958566421/prime-number-target-sqs"
+
+
+  pythonRequirements:
+    pythonBin: python3
+    noDeploy:
+      - boto3
+      - botocore
+      - awscli
+      - sympy
+      - black
+      - pytest
+      - pytest-mock
+plugins:
+  - serverless-python-requirements

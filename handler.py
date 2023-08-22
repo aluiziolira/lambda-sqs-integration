@@ -4,6 +4,7 @@ from prime_numbers_processing.prime_numbers_manager import PrimeNumberManager
 
 
 def prime_number_processing(event, context):
+    print(event)
     print("Event received...\nProcessing prime numbers")
     try:
         for record in event["Records"]:
