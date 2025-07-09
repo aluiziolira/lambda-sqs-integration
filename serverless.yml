@@ -9,7 +9,7 @@ provider:
   name: aws
   runtime: python3.11
   memorySize: 128
-  region: us-east-2
+  region: ${env:AWS_REGION, 'us-east-2'}
 
   iam:
     role:
@@ -74,8 +74,8 @@ functions:
           batchSize: 1
 
 custom:
-  sqs_prime_number_target_arn: arn:aws:sqs:us-east-2:009958566421:prime-number-target-sqs
-  sqs_prime_number_target_url: "https://sqs.us-east-2.amazonaws.com/009958566421/prime-number-target-sqs"
+  sqs_prime_number_target_arn: ${env:SQS_QUEUE_ARN}
+  sqs_prime_number_target_url: "https://sqs.${env:AWS_REGION, 'us-east-2'}.amazonaws.com/009958566421/prime-number-target-sqs"
 
 
   pythonRequirements:
