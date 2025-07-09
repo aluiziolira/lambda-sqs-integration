@@ -1,4 +1,4 @@
-[![CI](https://github.com/aluiziolira/lambda-sqs-integration/actions/workflows/ci.yml/badge.svg)](#) [![codecov](https://codecov.io/gh/aluiziolira/lambda-sqs-integration/branch/main/graph/badge.svg)](#) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#)
+[![CI](https://github.com/aluiziolira/lambda-sqs-integration/actions/workflows/ci.yml/badge.svg)](https://github.com/aluiziolira/lambda-sqs-integration/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/aluiziolira/lambda-sqs-integration/branch/main/graph/badge.svg)](https://codecov.io/gh/aluiziolira/lambda-sqs-integration) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Lambda ➜ SQS Integration
 
