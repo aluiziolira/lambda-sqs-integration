@@ -39,7 +39,7 @@ class TestCoverageBasic:
         assert manager.non_prime_numbers == [4, 6, 8, 9]
 
     @patch(
-        "prime_numbers_processing.prime_numbers_manager.PrimeNumberManager.get_prime_numbers"
+        "src.prime_numbers_processing.prime_numbers_manager.PrimeNumberManager.get_prime_numbers"
     )
     def test_handler_basic_functionality(self, mock_get_primes, mock_env):
         """Test basic handler functionality"""
