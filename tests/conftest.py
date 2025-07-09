@@ -3,9 +3,9 @@ import os
 from unittest.mock import patch, MagicMock
 
 # Add the src directory to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 # Add the project root to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import pytest
 
@@ -13,14 +13,17 @@ import pytest
 @pytest.fixture
 def mock_env():
     """Mock environment variables for testing"""
-    with patch.dict(os.environ, {
-        'SQS_PRIMES_TARGET': 'https://sqs.us-east-2.amazonaws.com/123456789012/test-queue',
-        'AWS_REGION': 'us-east-2',
-        'AWS_ACCESS_KEY_ID': 'testing',
-        'AWS_SECRET_ACCESS_KEY': 'testing',
-        'AWS_SECURITY_TOKEN': 'testing',
-        'AWS_SESSION_TOKEN': 'testing'
-    }):
+    with patch.dict(
+        os.environ,
+        {
+            "SQS_PRIMES_TARGET": "https://sqs.us-east-2.amazonaws.com/123456789012/test-queue",
+            "AWS_REGION": "us-east-2",
+            "AWS_ACCESS_KEY_ID": "testing",
+            "AWS_SECRET_ACCESS_KEY": "testing",
+            "AWS_SECURITY_TOKEN": "testing",
+            "AWS_SESSION_TOKEN": "testing",
+        },
+    ):
         yield
 
 
@@ -38,7 +41,7 @@ def sample_sqs_event():
                 "md5OfBody": "test-md5",
                 "eventSource": "aws:sqs",
                 "eventSourceARN": "arn:aws:sqs:us-east-2:123456789012:test-queue",
-                "awsRegion": "us-east-2"
+                "awsRegion": "us-east-2",
             }
         ]
     }
@@ -58,7 +61,7 @@ def sample_sqs_event_no_numbers():
                 "md5OfBody": "test-md5",
                 "eventSource": "aws:sqs",
                 "eventSourceARN": "arn:aws:sqs:us-east-2:123456789012:test-queue",
-                "awsRegion": "us-east-2"
+                "awsRegion": "us-east-2",
             }
         ]
     }
@@ -72,13 +75,13 @@ def sample_sqs_event_invalid_json():
             {
                 "messageId": "test-message-id-3",
                 "receiptHandle": "test-receipt-handle",
-                "body": 'invalid json',
+                "body": "invalid json",
                 "attributes": {},
                 "messageAttributes": {},
                 "md5OfBody": "test-md5",
                 "eventSource": "aws:sqs",
                 "eventSourceARN": "arn:aws:sqs:us-east-2:123456789012:test-queue",
-                "awsRegion": "us-east-2"
+                "awsRegion": "us-east-2",
             }
         ]
     }

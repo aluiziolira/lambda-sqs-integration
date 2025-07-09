@@ -1,0 +1,9 @@
+# Production dependencies
+-r requirements.txt
+
+# Development dependencies
+pytest==8.4.1
+pytest-cov==6.2.1
+black==25.1.0
+ruff==0.12.2
+isort==6.0.1
