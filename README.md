@@ -14,10 +14,10 @@ flowchart TD
     PM --> |send results| SQS2[Target SQS Queue]
     SQS1 --> |failed messages| DLQ[Dead Letter Queue]
     
-    style L fill:#f9f,stroke:#333,stroke-width:2px
-    style SQS1 fill:#bbf,stroke:#333,stroke-width:2px
-    style SQS2 fill:#bbf,stroke:#333,stroke-width:2px
-    style DLQ fill:#fbb,stroke:#333,stroke-width:2px
+    style L fill:#4a5568,stroke:#2d3748,stroke-width:2px,color:#ffffff
+    style SQS1 fill:#2b6cb0,stroke:#1e40af,stroke-width:2px,color:#ffffff
+    style SQS2 fill:#2b6cb0,stroke:#1e40af,stroke-width:2px,color:#ffffff
+    style DLQ fill:#b91c1c,stroke:#991b1b,stroke-width:2px,color:#ffffff
 ```
 
 ## 🎯 Technical Highlights
