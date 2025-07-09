@@ -1,3 +1,5 @@
+[![CI](https://github.com/aluiziolira/lambda-sqs-integration/actions/workflows/ci.yml/badge.svg)](#) [![codecov](https://codecov.io/gh/aluiziolira/lambda-sqs-integration/branch/main/graph/badge.svg)](#) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#)
+
 # Lambda ➜ SQS Integration
 
 A serverless AWS solution for processing prime numbers through Lambda functions triggered by SQS messages, with automatic forwarding of results to a target queue.
