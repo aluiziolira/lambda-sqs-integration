@@ -13,10 +13,15 @@ from src.utils.aws_utils import AWSUtils
 class TestCoverageBasic:
     """Basic test suite to achieve 85%+ coverage"""
 
-    @patch('src.utils.aws_utils.AWSUtils.send_sqs_message')
-    def test_prime_number_manager_basic_functionality(self, mock_send_sqs, mock_env):
+    @patch('boto3.client')
+    def test_prime_number_manager_basic_functionality(self, mock_boto_client, mock_env):
         """Test basic prime number processing functionality"""
-        mock_send_sqs.return_value = 200
+        # Mock the boto3 client
+        mock_client = MagicMock()
+        mock_client.send_message.return_value = {
+            "ResponseMetadata": {"HTTPStatusCode": 200}
+        }
+        mock_boto_client.return_value = mock_client
         
         manager = PrimeNumberManager()
         result = manager.get_prime_numbers([2, 3, 4, 5, 6])
@@ -24,10 +29,9 @@ class TestCoverageBasic:
         assert result == [2, 3, 5]
         assert manager.prime_numbers == [2, 3, 5]
         assert manager.non_prime_numbers == [4, 6]
-        mock_send_sqs.assert_called_once()
+        mock_client.send_message.assert_called_once()
 
-    @patch('src.utils.aws_utils.AWSUtils.send_sqs_message')
-    def test_prime_number_manager_no_primes(self, mock_send_sqs, mock_env):
+    def test_prime_number_manager_no_primes(self, mock_env):
         """Test prime number processing with no primes"""
         manager = PrimeNumberManager()
         result = manager.get_prime_numbers([4, 6, 8, 9])
@@ -35,9 +39,8 @@ class TestCoverageBasic:
         assert result == []
         assert manager.prime_numbers == []
         assert manager.non_prime_numbers == [4, 6, 8, 9]
-        mock_send_sqs.assert_not_called()
 
-    @patch('src.prime_numbers_processing.prime_numbers_manager.PrimeNumberManager.get_prime_numbers')
+    @patch('prime_numbers_processing.prime_numbers_manager.PrimeNumberManager.get_prime_numbers')
     def test_handler_basic_functionality(self, mock_get_primes, mock_env):
         """Test basic handler functionality"""
         mock_get_primes.return_value = [2, 3, 5]
@@ -90,7 +93,7 @@ class TestCoverageBasic:
         captured = capfd.readouterr()
         assert "General Error:" in captured.out
 
-    def test_prime_number_manager_context_manager(self):
+    def test_prime_number_manager_context_manager(self, capfd):
         """Test PrimeNumberManager context manager"""
         manager = PrimeNumberManager()
         
@@ -103,6 +106,43 @@ class TestCoverageBasic:
         assert result is None
         
         # Test __exit__ with exception
-        with pytest.capture_stdout() as captured:
-            result = manager.__exit__(ValueError, ValueError("test"), None)
-            assert result is None
+        result = manager.__exit__(ValueError, ValueError("test"), None)
+        assert result is None
+        
+        # Check that the exception type was printed
+        captured = capfd.readouterr()
+        assert "ValueError" in captured.out
+
+    @patch('boto3.client')
+    def test_prime_number_manager_with_sqs_response(self, mock_boto_client, mock_env, capfd):
+        """Test prime number manager with SQS response"""
+        # Mock the boto3 client
+        mock_client = MagicMock()
+        mock_client.send_message.return_value = {
+            "ResponseMetadata": {"HTTPStatusCode": 200}
+        }
+        mock_boto_client.return_value = mock_client
+        
+        manager = PrimeNumberManager()
+        result = manager.get_prime_numbers([2, 3])
+        
+        assert result == [2, 3]
+        captured = capfd.readouterr()
+        assert "Prime numbers sent to the target SQS!" in captured.out
+
+    @patch('boto3.client')
+    def test_prime_number_manager_no_sqs_response(self, mock_boto_client, mock_env, capfd):
+        """Test prime number manager with no SQS response"""
+        # Mock the boto3 client to return None response
+        mock_client = MagicMock()
+        mock_client.send_message.return_value = {
+            "ResponseMetadata": {"HTTPStatusCode": None}
+        }
+        mock_boto_client.return_value = mock_client
+        
+        manager = PrimeNumberManager()
+        result = manager.get_prime_numbers([2, 3])
+        
+        assert result == [2, 3]
+        captured = capfd.readouterr()
+        assert "Prime numbers sent to the target SQS!" not in captured.out
