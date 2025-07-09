@@ -1,6 +1,6 @@
 import json
 
-from prime_numbers_processing.prime_numbers_manager import PrimeNumberManager
+from src.prime_numbers_processing.prime_numbers_manager import PrimeNumberManager
 
 
 def prime_number_processing(event, context):
