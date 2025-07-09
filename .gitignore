@@ -83,3 +83,7 @@ $RECYCLE.BIN/
 .directory
 .Trash-*
 .nfs*
+
+# AI/Claude files
+CLAUDE.md
+.claude/
