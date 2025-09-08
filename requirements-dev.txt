@@ -3,7 +3,7 @@
 
 # Development dependencies
 pytest==8.4.1
-pytest-cov==6.2.1
+pytest-cov==6.3.0
 black==25.1.0
 ruff==0.12.10
 isort==6.0.1
